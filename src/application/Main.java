@@ -43,6 +43,7 @@ public class Main {
     static void ejecutarOpcion(int opcion) {
         switch (opcion) {
             case 1 -> registrarEntrada();
+            case 2 -> registrarSalida();
             case 5 -> System.out.println("Programa finalizado.");
         }
     }
@@ -164,6 +165,40 @@ public class Main {
             valor = valor * 10 + caracter - '0';
         }
         return valor;
+    }
+
+    static void registrarSalida() {
+        int celda = leerEnteroEnRango("Número de celda (1-" + CAPACIDAD_TOTAL + "): ", 1, CAPACIDAD_TOTAL);
+        int indice = celda - 1;
+        if (tipos[indice] == null) {
+            System.out.println("La celda " + celda + " está libre; no hay vehículo para liquidar.");
+            return;
+        }
+
+        LocalDateTime salida;
+        while (true) {
+            salida = leerFechaHora("Fecha y hora de salida (yyyy-MM-dd HH:mm): ");
+            if (!salida.isBefore(ingresos[indice])) {
+                break;
+            }
+            System.out.println("La salida no puede ser anterior al ingreso ("
+                    + ingresos[indice].format(FORMATO_FECHA_HORA) + ").");
+        }
+
+        long total = liquidar(indice, salida);
+        if (tipos[indice].equals(CARRO)) {
+            recaudoCarros += total;
+        } else {
+            recaudoMotos += total;
+        }
+        tipos[indice] = null;
+        ingresos[indice] = null;
+        celdasOcupadas--;
+        celdasLibres++;
+    }
+
+    static long liquidar(int indice, LocalDateTime salida) {
+        return 0;
     }
 
 }
