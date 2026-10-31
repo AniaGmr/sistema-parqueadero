@@ -1,7 +1,9 @@
 package application;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class Main {
@@ -198,7 +200,53 @@ public class Main {
     }
 
     static long liquidar(int indice, LocalDateTime salida) {
-        return 0;
+        LocalDateTime ingreso = ingresos[indice];
+        boolean esCarro = tipos[indice].equals(CARRO);
+        long tarifaDia = esCarro ? TARIFA_DIA_CARRO : TARIFA_DIA_MOTO;
+        long tarifaHora = esCarro ? TARIFA_HORA_CARRO : TARIFA_HORA_MOTO;
+
+        long diasACobrar = contarDiasCompletos(ingreso, salida);
+        LocalDateTime cursor = ingreso.plusDays(diasACobrar);
+        long horasACobrar = calcularHorasRestantes(cursor, salida);
+
+        if (horasACobrar >= UMBRAL_HORAS_DIA) {
+            diasACobrar++;
+            horasACobrar = 0;
+        }
+
+        long total = diasACobrar * tarifaDia + horasACobrar * tarifaHora;
+        mostrarFactura(indice, salida, diasACobrar, tarifaDia, horasACobrar, tarifaHora, total);
+        return total;
+    }
+
+    static long contarDiasCompletos(LocalDateTime ingreso, LocalDateTime salida) {
+        return ChronoUnit.DAYS.between(ingreso, salida);
+    }
+
+    static long calcularHorasRestantes(LocalDateTime cursor, LocalDateTime salida) {
+        long minutosRestantes = Duration.between(cursor, salida).toMinutes();
+        return (minutosRestantes + 59) / 60;
+    }
+
+    static void mostrarFactura(int indice, LocalDateTime salida, long dias, long tarifaDia,
+                               long horas, long tarifaHora, long total) {
+        System.out.println("========== FACTURA ==========");
+        System.out.println("Celda liberada: " + (indice + 1));
+        System.out.println("Tipo de vehículo: " + tipos[indice]);
+        System.out.println("Ingreso: " + ingresos[indice].format(FORMATO_FECHA_HORA));
+        System.out.println("Salida:  " + salida.format(FORMATO_FECHA_HORA));
+        if (dias > 0) {
+            System.out.println(dias + " día(s) x " + formatoMoneda(tarifaDia) + " = " + formatoMoneda(dias * tarifaDia));
+        }
+        if (horas > 0) {
+            System.out.println(horas + " hora(s) x " + formatoMoneda(tarifaHora) + " = " + formatoMoneda(horas * tarifaHora));
+        }
+        System.out.println("TOTAL A PAGAR: " + formatoMoneda(total));
+        System.out.println("=============================");
+    }
+
+    static String formatoMoneda(long valor) {
+        return String.format("$%,d", valor);
     }
 
 }
