@@ -46,6 +46,8 @@ public class Main {
         switch (opcion) {
             case 1 -> registrarEntrada();
             case 2 -> registrarSalida();
+            case 3 -> reporteOcupacion();
+            case 4 -> reporteFinanciero();
             case 5 -> System.out.println("Programa finalizado.");
         }
     }
@@ -247,6 +249,19 @@ public class Main {
 
     static String formatoMoneda(long valor) {
         return String.format("$%,d", valor);
+    }
+
+    static void reporteOcupacion() {
+        System.out.println("--- Ocupación celdas ---");
+        System.out.println("Celdas ocupadas: " + celdasOcupadas);
+        System.out.println("Celdas libres: " + celdasLibres);
+    }
+
+    static void reporteFinanciero() {
+        System.out.println("--- Reporte financiero ---");
+        System.out.println("Recaudo carros: " + formatoMoneda(recaudoCarros));
+        System.out.println("Recaudo motos: " + formatoMoneda(recaudoMotos));
+        System.out.println("Total general: " + formatoMoneda(recaudoCarros + recaudoMotos));
     }
 
 }
