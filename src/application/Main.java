@@ -55,4 +55,35 @@ public class Main {
         recaudoMotos = 0;
     }
 
+    static void registrarEntrada() {
+        int indice = celdaDisponible();
+        if (indice == -1) {
+            System.out.println("El parqueadero está lleno. No se puede registrar el ingreso.");
+            return;
+        }
+        String tipo = leerTipoVehiculo();
+        LocalDateTime ingreso = leerFechaHora("Fecha y hora de ingreso (yyyy-MM-dd HH:mm): ");
+
+        tipos[indice] = tipo;
+        ingresos[indice] = ingreso;
+        celdasOcupadas++;
+        celdasLibres--;
+        System.out.println("Vehículo (" + tipo + ") asignado a la celda " + (indice + 1) + ".");
+    }
+
+    // TEMPORAL (se reemplaza en el paso 4)
+    static int celdaDisponible() {
+        return -1;
+    }
+
+    // TEMPORAL (se reemplaza en el paso 5)
+    static String leerTipoVehiculo() {
+        return CARRO;
+    }
+
+    // TEMPORAL (se reemplaza en el paso 5)
+    static LocalDateTime leerFechaHora(String mensaje) {
+        return LocalDateTime.now();
+    }
+
 }
