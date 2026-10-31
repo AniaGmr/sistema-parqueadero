@@ -70,18 +70,20 @@ public class Main {
         celdasLibres--;
         System.out.println("Vehículo (" + tipo + ") asignado a la celda " + (indice + 1) + ".");
     }
-
-    // TEMPORAL (se reemplaza en el paso 4)
+    
     static int celdaDisponible() {
+        for (int i = 0; i < CAPACIDAD_TOTAL; i++) {
+            if (tipos[i] == null) {
+                return i;
+            }
+        }
         return -1;
     }
 
-    // TEMPORAL (se reemplaza en el paso 5)
     static String leerTipoVehiculo() {
         return CARRO;
     }
 
-    // TEMPORAL (se reemplaza en el paso 5)
     static LocalDateTime leerFechaHora(String mensaje) {
         return LocalDateTime.now();
     }
